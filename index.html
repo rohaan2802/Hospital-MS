@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Ivor Paine Memorial Hospital — Hospital Management System for managing patients, staff, wards, and medical records." />
+  <title>IPMH — Hospital Management System</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+  <!-- ── Sidebar Navigation ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z" fill="url(#brandGrad)" />
+          <path d="M11 8h2v3h3v2h-3v3h-2v-3H8v-2h3V8z" fill="#fff" />
+          <defs>
+            <linearGradient id="brandGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#4f8ef7" />
+              <stop offset="1" stop-color="#7b5ea7" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">IPMH</span>
+        <span class="brand-sub">Hospital System</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <a href="index.html" class="nav-item active" id="nav-dashboard">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2" />
+          <rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2" />
+          <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2" />
+          <rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2" />
+        </svg>
+        Dashboard
+      </a>
+
+      <div class="nav-section-label">Clinical</div>
+      <a href="patients.html" class="nav-item" id="nav-patients">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" />
+          <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+        </svg>
+        Patients
+      </a>
+      <a href="complaints.html" class="nav-item" id="nav-complaints">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+          <path d="M9 12h6M9 16h6M17 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        Complaints & Treatments
+      </a>
+
+      <div class="nav-section-label">Hospital</div>
+      <a href="wards.html" class="nav-item" id="nav-wards">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+          <path d="M3 21h18M4 21V7l8-5 8 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <rect x="9" y="12" width="6" height="9" rx="1" stroke="currentColor" stroke-width="2" />
+        </svg>
+        Wards & Beds
+      </a>
+
+      <div class="nav-section-label">Staff</div>
+      <a href="doctors.html" class="nav-item" id="nav-doctors">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2" />
+          <path d="M6 20v-2a6 6 0 0 1 12 0v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <path d="M9 12v6m3-3H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+        Doctors
+      </a>
+      <a href="nurses.html" class="nav-item" id="nav-nurses">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+          <path d="M5.5 21v-2a6.5 6.5 0 0 1 13 0v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <path d="M12 11v4m-2-2h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+        Nurses
+      </a>
+      <a href="reviews.html" class="nav-item" id="nav-reviews">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+          <polygon
+            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+            stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+        </svg>
+        Performance Reviews
+      </a>
+      <a href="reports.html" class="nav-item" id="nav-reports">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2"/>
+          <polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="2"/>
+          <line x1="8" y1="13" x2="16" y2="13" stroke="currentColor" stroke-width="2"/>
+          <line x1="8" y1="17" x2="16" y2="17" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        Reports
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="user-avatar">A</div>
+        <div class="user-info">
+          <span class="user-name">Admin</span>
+          <span class="user-role">System Administrator</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Mobile Top Bar ── -->
+  <header class="topbar">
+    <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <span class="topbar-title">Dashboard</span>
+    <div class="topbar-actions">
+      <button class="topbar-icon-btn" title="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" />
+        </svg>
+        <span class="notif-badge">3</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── Main Content ── -->
+  <main class="main-content" id="mainContent">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">Welcome back, here's what's happening at IPMH today.</p>
+      </div>
+      <div class="page-header-actions">
+        <span class="date-badge" id="currentDate"></span>
+      </div>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="stats-grid">
+      <div class="stat-card stat-blue" id="stat-patients">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" />
+            <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-number" data-target="30">0</div>
+          <div class="stat-label">Total Patients</div>
+          <div class="stat-change positive">↑ 4 this month</div>
+        </div>
+      </div>
+
+      <div class="stat-card stat-green" id="stat-doctors">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2" />
+            <path d="M6 20v-2a6 6 0 0 1 12 0v2" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-number" data-target="14">0</div>
+          <div class="stat-label">Doctors on Staff</div>
+          <div class="stat-change neutral">4 consultants</div>
+        </div>
+      </div>
+
+      <div class="stat-card stat-purple" id="stat-nurses">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+            <path d="M5.5 21v-2a6.5 6.5 0 0 1 13 0v2" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-number" data-target="27">0</div>
+          <div class="stat-label">Active Nurses</div>
+          <div class="stat-change neutral">8 wards covered</div>
+        </div>
+      </div>
+
+      <div class="stat-card stat-orange" id="stat-beds">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8M2 15h20M7 15v5M17 15v5" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-number" data-target="50">0</div>
+          <div class="stat-label">Total Beds</div>
+          <div class="stat-change negative">30 occupied</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts & Info Row -->
+    <div class="dashboard-grid">
+      <!-- Ward Occupancy -->
+      <div class="card card-wide">
+        <div class="card-header">
+          <h2 class="card-title">Ward Occupancy</h2>
+          <span class="card-badge">Live</span>
+        </div>
+        <div class="ward-bars" id="wardBars"></div>
+      </div>
+
+      <!-- Specialty Breakdown -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Specialties</h2>
+        </div>
+        <div class="specialty-list" id="specialtyList"></div>
+      </div>
+    </div>
+
+    <!-- Recent Patients + Quick Actions -->
+    <div class="dashboard-grid">
+      <!-- Recent Patients -->
+      <div class="card card-wide">
+        <div class="card-header">
+          <h2 class="card-title">Recent Admissions</h2>
+          <a href="patients.html" class="card-link">View all →</a>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table" id="recentPatientsTable">
+            <thead>
+              <tr>
+                <th>Patient</th>
+                <th>Ward</th>
+                <th>Admitted</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="recentPatientsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Quick Actions</h2>
+        </div>
+        <div class="quick-actions">
+          <a href="patients.html#add" class="qa-btn qa-blue">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+            </svg>
+            Admit Patient
+          </a>
+          <a href="doctors.html#add" class="qa-btn qa-green">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+            </svg>
+            Add Doctor
+          </a>
+          <a href="complaints.html#add" class="qa-btn qa-purple">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+            </svg>
+            Log Treatment
+          </a>
+          <a href="reviews.html#add" class="qa-btn qa-orange">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+            </svg>
+            New Review
+          </a>
+        </div>
+
+        <div class="card-divider"></div>
+
+        <div class="card-header" style="margin-top:1rem;">
+          <h2 class="card-title">System Stats</h2>
+        </div>
+        <ul class="info-list">
+          <li><span>Complaints logged</span><strong>15</strong></li>
+          <li><span>Treatments available</span><strong>15</strong></li>
+          <li><span>Care units</span><strong>8</strong></li>
+          <li><span>Performance reviews</span><strong>20</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Developers Footer -->
+    <div style="text-align: center; margin-top: 3rem; color: var(--text-3); font-size: 0.85rem;">
+      Developed by <strong>Zohaib Hassan, Mohammad Rohaan, Shehryar Ahmad &amp; Tehreem Shakeel</strong>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/live-sync.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/nav.js"></script>
+</body>
+
+</html>

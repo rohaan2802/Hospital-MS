@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="description" content="IPMH — Manage hospital patients, admissions and discharges."/>
+  <title>Patients — IPMH</title>
+  <link rel="stylesheet" href="css/global.css"/>
+  <link rel="stylesheet" href="css/pages.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z" fill="url(#g1)"/><path d="M11 8h2v3h3v2h-3v3h-2v-3H8v-2h3V8z" fill="#fff"/><defs><linearGradient id="g1" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#4f8ef7"/><stop offset="1" stop-color="#7b5ea7"/></linearGradient></defs></svg></div>
+    <div class="brand-text"><span class="brand-name">IPMH</span><span class="brand-sub">Hospital System</span></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <a href="index.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/></svg>Dashboard</a>
+    <div class="nav-section-label">Clinical</div>
+    <a href="patients.html" class="nav-item active"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg>Patients</a>
+    <a href="complaints.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M9 12h6M9 16h6M17 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z" stroke="currentColor" stroke-width="2"/></svg>Complaints & Treatments</a>
+    <div class="nav-section-label">Hospital</div>
+    <a href="wards.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 21h18M4 21V7l8-5 8 5v14" stroke="currentColor" stroke-width="2"/><rect x="9" y="12" width="6" height="9" rx="1" stroke="currentColor" stroke-width="2"/></svg>Wards & Beds</a>
+    <div class="nav-section-label">Staff</div>
+    <a href="doctors.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M6 20v-2a6 6 0 0 1 12 0v2" stroke="currentColor" stroke-width="2"/></svg>Doctors</a>
+    <a href="nurses.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M5.5 21v-2a6.5 6.5 0 0 1 13 0v2" stroke="currentColor" stroke-width="2"/></svg>Nurses</a>
+    <a href="reviews.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke="currentColor" stroke-width="2"/></svg>Performance Reviews</a>
+    <a href="reports.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2"/><polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="2"/><line x1="8" y1="13" x2="16" y2="13" stroke="currentColor" stroke-width="2"/><line x1="8" y1="17" x2="16" y2="17" stroke="currentColor" stroke-width="2"/></svg>Reports</a>
+  </nav>
+  <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar">A</div><div class="user-info"><span class="user-name">Admin</span><span class="user-role">System Administrator</span></div></div></div>
+</aside>
+
+<header class="topbar">
+  <button class="hamburger" id="hamburgerBtn"><span></span><span></span><span></span></button>
+  <span class="topbar-title">Patients</span>
+</header>
+
+<main class="main-content">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Patients</h1>
+      <p class="page-subtitle">Manage patient admissions, records and discharges.</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-primary" id="addPatientBtn" onclick="openModal('patientModal')">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        Admit Patient
+      </button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="filter-bar">
+      <input type="text" id="searchInput" placeholder="Search patients…"/>
+      <select id="wardFilter">
+        <option value="">All Wards</option>
+      </select>
+      <select id="statusFilter">
+        <option value="">All Status</option>
+        <option value="admitted">Admitted</option>
+        <option value="discharged">Discharged</option>
+      </select>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Patient</th>
+            <th>DOB</th>
+            <th>Ward</th>
+            <th>Bed</th>
+            <th>Doctor</th>
+            <th>Admitted</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="patientsTbody"></tbody>
+      </table>
+    </div>
+    <div class="pagination" id="pagination"></div>
+  </div>
+</main>
+
+<!-- Add/Edit Patient Modal -->
+<div class="modal-overlay" id="patientModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="patientModalTitle">Admit Patient</h2>
+      <button class="modal-close">✕</button>
+    </div>
+    <form id="patientForm">
+      <input type="hidden" id="editPatientNo"/>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Full Name <span class="required-star">*</span></label>
+          <input type="text" id="pName" required placeholder="e.g. John Smith"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date of Birth <span class="required-star">*</span></label>
+          <input type="date" id="pDob" required/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Date Admitted <span class="required-star">*</span></label>
+          <input type="date" id="pAdmitted" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date Discharged</label>
+          <input type="date" id="pDischarged"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Ward <span class="required-star">*</span></label>
+          <select id="pWard" required></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Bed No <span class="required-star">*</span></label>
+          <select id="pBed" required></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">In-charge Doctor <span class="required-star">*</span></label>
+          <select id="pDoctor" required></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Consultant <span class="required-star">*</span></label>
+          <select id="pConsultant" required></select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-ghost" onclick="closeModal('patientModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="patientSubmitBtn">Admit Patient</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header">
+      <h2 class="modal-title">Confirm Delete</h2>
+      <button class="modal-close">✕</button>
+    </div>
+    <p class="confirm-body">Are you sure you want to remove <span class="confirm-name" id="deletePatientName"></span>? This action cannot be undone.</p>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('deleteModal')">Cancel</button>
+      <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/live-sync.js"></script>
+<script src="js/patients.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>
+

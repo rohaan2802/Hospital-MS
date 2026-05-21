@@ -1,0 +1,92 @@
+/* ═══════════════════════════════════
+   Pages (patients / doctors / etc.)
+═══════════════════════════════════ */
+
+.page-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ── Action toolbar above table ── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* ── Detail panel ── */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.detail-item {}
+.detail-item .d-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+  margin-bottom: 0.2rem;
+}
+.detail-item .d-val {
+  font-size: 0.9rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* ── Avatar-style column ── */
+.avatar-cell { display: flex; align-items: center; gap: 0.65rem; }
+.avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+.avatar-blue   { background: linear-gradient(135deg, #4f8ef7, #7b5ea7); }
+.avatar-green  { background: linear-gradient(135deg, #3fb950, #39d5d5); }
+.avatar-purple { background: linear-gradient(135deg, #a371f7, #f78166); }
+.avatar-orange { background: linear-gradient(135deg, #f78166, #f7b066); }
+
+/* ── Action icons in table ── */
+.row-actions { display: flex; gap: 0.4rem; }
+.icon-btn {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-3);
+  transition: all var(--transition);
+}
+.icon-btn svg { width: 15px; height: 15px; }
+.icon-btn:hover { background: var(--bg-3); color: var(--text); }
+.icon-btn.edit:hover  { background: var(--blue-dim);  color: var(--blue); }
+.icon-btn.del:hover   { background: var(--red-dim);   color: var(--red); }
+
+/* ── Pagination ── */
+.pagination {
+  display: flex; align-items: center; gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+.pg-btn {
+  min-width: 32px; height: 32px;
+  border-radius: 6px;
+  font-size: 0.8rem; font-weight: 600;
+  color: var(--text-2);
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition);
+  border: 1px solid transparent;
+}
+.pg-btn:hover { background: var(--bg-3); color: var(--text); }
+.pg-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+.pg-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.pg-info { font-size: 0.78rem; color: var(--text-3); margin-right: 0.5rem; }
+
+/* ── Confirm dialog ── */
+.confirm-body { font-size: 0.9rem; color: var(--text-2); line-height: 1.6; margin-bottom: 1.5rem; }
+.confirm-name { color: var(--text); font-weight: 600; }
