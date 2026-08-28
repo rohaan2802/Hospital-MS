@@ -296,6 +296,12 @@ On Windows with XAMPP, you can instead run the included prompt-based importer. I
 .\scripts\import-aiven-schema.ps1
 ```
 
+If the certificate download is blocked by your network, download the CA certificate from Aiven Console > your MySQL service > Connection information and pass its path instead:
+
+```powershell
+.\scripts\import-aiven-schema.ps1 -CaCertificatePath "C:\Users\YourName\Downloads\ca.pem"
+```
+
 ### 2. Deploy with SnapDeploy
 
 1. Connect the GitHub repository and select `main`.

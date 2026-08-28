@@ -1,3 +1,7 @@
+param(
+    [string]$CaCertificatePath = ''
+)
+
 <##
 Imports Hospital MS demo schema into an existing Aiven MySQL database.
 The script prompts locally for all connection values and never writes them to disk.
@@ -25,8 +29,19 @@ if ([string]::IsNullOrWhiteSpace($dbHost) -or [string]::IsNullOrWhiteSpace($dbPo
     throw 'Host, port, and username are required.'
 }
 
-New-Item -ItemType Directory -Force -Path $certificateDirectory | Out-Null
-Invoke-WebRequest -Uri 'https://cdn.aiven.io/ca.pem' -OutFile $certificatePath
+if ($CaCertificatePath -ne '') {
+    if (-not (Test-Path -LiteralPath $CaCertificatePath)) { throw "CA certificate not found: $CaCertificatePath" }
+    $certificatePath = (Resolve-Path -LiteralPath $CaCertificatePath).Path
+} elseif (Test-Path -LiteralPath $certificatePath) {
+    Write-Host "Using cached Aiven CA certificate: $certificatePath"
+} else {
+    New-Item -ItemType Directory -Force -Path $certificateDirectory | Out-Null
+    try {
+        Invoke-WebRequest -Uri 'https://cdn.aiven.io/ca.pem' -OutFile $certificatePath
+    } catch {
+        throw 'Could not download Aiven CA certificate. Download it from Aiven Console > your MySQL service > Connection information, then rerun this script with -CaCertificatePath "C:\path\to\ca.pem".'
+    }
+}
 
 $passwordPointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($dbPassword)
 try {
