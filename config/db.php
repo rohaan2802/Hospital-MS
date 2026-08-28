@@ -21,10 +21,13 @@ function getConnection(): PDO
     ];
     $sslCaContent = getenv('DB_SSL_CA_CONTENT') ?: '';
     $sslCa = getenv('DB_SSL_CA') ?: '';
+    $bundledCa = dirname(__DIR__) . '/certs/aiven-ca.pem';
     if ($sslCaContent !== '') {
         $sslCa = sys_get_temp_dir() . '/aiven-ca.pem';
         file_put_contents($sslCa, $sslCaContent, LOCK_EX);
         chmod($sslCa, 0600);
+    } elseif ($sslCa === '' && is_file($bundledCa)) {
+        $sslCa = $bundledCa;
     }
     if ($sslCa !== '') {
         $options[PDO::MYSQL_ATTR_SSL_CA] = $sslCa;

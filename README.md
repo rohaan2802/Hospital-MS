@@ -314,19 +314,12 @@ DB_PORT=<Aiven port>
 DB_NAME=defaultdb
 DB_USER=<Aiven username>
 DB_PASSWORD=<Aiven password>
-DB_SSL_CA_CONTENT=<entire contents of ca.pem>
-DB_SSL_CA=/tmp/aiven-ca.pem
+DB_SSL_CA=certs/aiven-ca.pem
 ```
 
 4. Deploy and open the generated URL. The home directory opens the dashboard directly.
 
-If your platform supports mounting a certificate file instead of storing the PEM text in an environment variable, use `DB_SSL_CA` and point it at the absolute path to `ca.pem`. For example:
-
-```text
-DB_SSL_CA=/app/certs/ca.pem
-```
-
-For SnapDeploy, set `DB_SSL_CA` to a harmless placeholder such as `/tmp/aiven-ca.pem` if the dashboard insists on a value, and put the real certificate text in `DB_SSL_CA_CONTENT`. The app will use the pasted certificate content and create a temporary PEM file at runtime.
+The repository now includes the public Aiven CA certificate at `certs/aiven-ca.pem`, and the app will use it automatically if `DB_SSL_CA_CONTENT` is not set. If your deployment platform lets you mount a different certificate path, you can still override `DB_SSL_CA`.
 
 Never commit `.env`, Aiven credentials, or a real patient dataset. The free services are suitable only for a portfolio/demo: SnapDeploy can sleep idle containers and Aiven Free has limited storage and no high-availability SLA.
 
