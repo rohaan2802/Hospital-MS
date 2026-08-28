@@ -309,17 +309,43 @@ If the certificate download is blocked by your network, download the CA certific
 3. Add these environment variables in the SnapDeploy dashboard:
 
 ```text
-DB_HOST=<Aiven host>
-DB_PORT=<Aiven port>
-DB_NAME=defaultdb
-DB_USER=<Aiven username>
-DB_PASSWORD=<Aiven password>
+DB_HOST=mysql-1151d526-project-ec1.h.aivencloud.com
+DB_PORT=25038
+DB_NAME=hospitalms
+DB_USER=avnadmin
+DB_PASSWORD=<your Aiven MySQL password>
 DB_SSL_CA=certs/aiven-ca.pem
 ```
 
 4. Deploy and open the generated URL. The home directory opens the dashboard directly.
 
 The repository now includes the public Aiven CA certificate at `certs/aiven-ca.pem`, and the app will use it automatically if `DB_SSL_CA_CONTENT` is not set. If your deployment platform lets you mount a different certificate path, you can still override `DB_SSL_CA`.
+
+### 3. Live deployment details
+
+Live URL: `ADD_YOUR_SNAPDEPLOY_URL_HERE`
+
+Deployment notes:
+
+- The app now opens directly without a sign-in screen.
+- Database access uses the bundled Aiven CA certificate at `certs/aiven-ca.pem`.
+- The database name for this deployment is `hospitalms`, not Aiven's default `defaultdb`.
+- The `DB_PASSWORD` value above is the Aiven MySQL password shown in the console.
+- If SnapDeploy redeploys from GitHub, make sure it is pulling the latest `main` branch.
+
+### 4. Keeping the service warm
+
+GitHub Actions can run scheduled workflows, but the shortest supported interval is once every 5 minutes, and scheduled runs may be delayed or dropped during heavy load. GitHub also notes that scheduled workflows only run from the default branch and can be disabled after 60 days of inactivity in public repositories.
+
+So:
+
+- `every 3 minutes` is not a good fit for GitHub Actions.
+- `every 5 minutes` is the practical minimum on GitHub Actions.
+- GitHub Actions is okay for a simple heartbeat to an HTTP endpoint, but it is not a guarantee that a free database or container will never sleep.
+- If SnapDeploy or Aiven already provides a built-in keep-alive or health check, use that first.
+- If you want a true heartbeat, use a scheduled workflow that calls the app URL or a health endpoint every 5 minutes.
+
+This repository includes a DB health endpoint at `api/health.php`. If you want an automatic keep-alive, add a GitHub Actions workflow that calls that endpoint every 5 minutes and store the deployed URL in a GitHub Actions secret named `HEALTHCHECK_URL`, for example `https://your-app.example.com/api/health.php`.
 
 Never commit `.env`, Aiven credentials, or a real patient dataset. The free services are suitable only for a portfolio/demo: SnapDeploy can sleep idle containers and Aiven Free has limited storage and no high-availability SLA.
 
