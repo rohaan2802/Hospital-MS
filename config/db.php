@@ -19,9 +19,9 @@ function getConnection(): PDO
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES => false,
     ];
-    $sslCa = getenv('DB_SSL_CA') ?: '';
     $sslCaContent = getenv('DB_SSL_CA_CONTENT') ?: '';
-    if ($sslCa === '' && $sslCaContent !== '') {
+    $sslCa = getenv('DB_SSL_CA') ?: '';
+    if ($sslCaContent !== '') {
         $sslCa = sys_get_temp_dir() . '/aiven-ca.pem';
         file_put_contents($sslCa, $sslCaContent, LOCK_EX);
         chmod($sslCa, 0600);
