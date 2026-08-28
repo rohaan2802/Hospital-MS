@@ -4,11 +4,12 @@ declare(strict_types=1);
 // Nurses API: listing, ward/care-unit metadata, and CRUD.
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/helpers.php';
+requireAuth();
 
 try {
-    $conn = getSqlServerConnection();
+    $conn = getConnection();
 } catch (Throwable $e) {
-    sendJson(500, ['ok' => false, 'error' => $e->getMessage()]);
+    sendJson(500, ['ok' => false, 'error' => 'Database service unavailable.']);
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -43,16 +44,16 @@ function handleCreate($conn): void
 
     $unit = isset($b['unit']) && $b['unit'] !== '' ? (int) $b['unit'] : null;
     if ($unit === null) {
-        $unitStmt = runQuery($conn, "SELECT TOP 1 care_unit_no FROM care_unit WHERE ward_name = ? ORDER BY care_unit_no", [$b['ward']]);
-        $unitRow = sqlsrv_fetch_array($unitStmt, SQLSRV_FETCH_ASSOC);
+        $unitStmt = runQuery($conn, "SELECT care_unit_no FROM care_unit WHERE ward_name = ? ORDER BY care_unit_no LIMIT 1", [$b['ward']]);
+        $unitRow = fetchOneAssoc($unitStmt);
         $unit = $unitRow ? (int) $unitRow['care_unit_no'] : null;
     }
 
-    $next = runQuery($conn, "SELECT ISNULL(MAX(staff_no),0)+1 AS next_no FROM staff");
-    $row = sqlsrv_fetch_array($next, SQLSRV_FETCH_ASSOC);
+    $next = runQuery($conn, "SELECT COALESCE(MAX(staff_no),0)+1 AS next_no FROM staff");
+    $row = fetchOneAssoc($next);
     $no = (int) $row['next_no'];
 
-    if (!sqlsrv_begin_transaction($conn)) sendJson(500, ['ok' => false, 'error' => 'Unable to start transaction.']);
+    if (!$conn->beginTransaction()) sendJson(500, ['ok' => false, 'error' => 'Unable to start transaction.']);
     try {
         runQuery($conn, "INSERT INTO staff(staff_no, staff_name) VALUES (?,?)", [$no, $b['name']]);
         runQuery(
@@ -60,10 +61,10 @@ function handleCreate($conn): void
             "INSERT INTO nurse(staff_no, nurse_type, ward_name, care_unit_no) VALUES (?,?,?,?)",
             [$no, $b['type'], $b['ward'], $unit]
         );
-        sqlsrv_commit($conn);
+        $conn->commit();
         sendJson(201, ['ok' => true, 'data' => ['staff_no' => $no]]);
     } catch (Throwable $e) {
-        sqlsrv_rollback($conn);
+        $conn->rollBack();
         sendJson(500, ['ok' => false, 'error' => 'Create nurse failed.']);
     }
 }
@@ -87,14 +88,14 @@ function handleDelete($conn): void
     $b = getJsonInput();
     $no = isset($b['no']) ? (int) $b['no'] : 0;
     if ($no <= 0) sendJson(400, ['ok' => false, 'error' => 'Missing nurse number.']);
-    if (!sqlsrv_begin_transaction($conn)) sendJson(500, ['ok' => false, 'error' => 'Unable to start transaction.']);
+    if (!$conn->beginTransaction()) sendJson(500, ['ok' => false, 'error' => 'Unable to start transaction.']);
     try {
         runQuery($conn, "DELETE FROM nurse WHERE staff_no=?", [$no]);
         runQuery($conn, "DELETE FROM staff WHERE staff_no=?", [$no]);
-        sqlsrv_commit($conn);
+        $conn->commit();
         sendJson(200, ['ok' => true]);
     } catch (Throwable $e) {
-        sqlsrv_rollback($conn);
+        $conn->rollBack();
         sendJson(409, ['ok' => false, 'error' => 'Cannot delete nurse due to linked records.']);
     }
 }

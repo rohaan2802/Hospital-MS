@@ -13,6 +13,11 @@ const API = (() => {
       payload = {};
     }
 
+    if (response.status === 401) {
+      window.location.replace('login.html');
+      throw new Error('Your session has expired.');
+    }
+
     if (!response.ok || payload.ok === false) {
       const message = payload.error || `Request failed: ${response.status}`;
       throw new Error(message);

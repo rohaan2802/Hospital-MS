@@ -4,11 +4,12 @@ declare(strict_types=1);
 // Complaints/Treatments API: record list, lookups, create, and delete.
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/helpers.php';
+requireAuth();
 
 try {
-    $conn = getSqlServerConnection();
+    $conn = getConnection();
 } catch (Throwable $e) {
-    sendJson(500, ['ok' => false, 'error' => $e->getMessage()]);
+    sendJson(500, ['ok' => false, 'error' => 'Database service unavailable.']);
 }
 
 $method = $_SERVER['REQUEST_METHOD'];

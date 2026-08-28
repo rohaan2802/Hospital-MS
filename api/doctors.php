@@ -4,11 +4,12 @@ declare(strict_types=1);
 // Doctors API: doctor/consultant listings and CRUD operations.
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/helpers.php';
+requireAuth();
 
 try {
-    $conn = getSqlServerConnection();
+    $conn = getConnection();
 } catch (Throwable $e) {
-    sendJson(500, ['ok' => false, 'error' => $e->getMessage()]);
+    sendJson(500, ['ok' => false, 'error' => 'Database service unavailable.']);
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -63,11 +64,11 @@ function handleCreate($conn): void
     }
     $consultantNo = isset($b['consultant_no']) && $b['consultant_no'] !== '' ? (int) $b['consultant_no'] : null;
 
-    $next = runQuery($conn, "SELECT ISNULL(MAX(staff_no),0)+1 AS next_no FROM staff");
-    $row = sqlsrv_fetch_array($next, SQLSRV_FETCH_ASSOC);
+    $next = runQuery($conn, "SELECT COALESCE(MAX(staff_no),0)+1 AS next_no FROM staff");
+    $row = fetchOneAssoc($next);
     $no = (int) $row['next_no'];
 
-    if (!sqlsrv_begin_transaction($conn)) sendJson(500, ['ok' => false, 'error' => 'Unable to start transaction.']);
+    if (!$conn->beginTransaction()) sendJson(500, ['ok' => false, 'error' => 'Unable to start transaction.']);
     $ok = true;
     $ok = $ok && runQuery($conn, "INSERT INTO staff(staff_no, staff_name) VALUES (?,?)", [$no, $b['name']]) !== false;
     $ok = $ok && runQuery(
@@ -85,10 +86,10 @@ function handleCreate($conn): void
     }
 
     if ($ok) {
-        sqlsrv_commit($conn);
+        $conn->commit();
         sendJson(201, ['ok' => true, 'data' => ['staff_no' => $no]]);
     }
-    sqlsrv_rollback($conn);
+    $conn->rollBack();
     sendJson(500, ['ok' => false, 'error' => 'Create doctor failed.']);
 }
 
@@ -115,15 +116,15 @@ function handleDelete($conn): void
     $no = isset($b['no']) ? (int) $b['no'] : 0;
     if ($no <= 0) sendJson(400, ['ok' => false, 'error' => 'Missing doctor number.']);
 
-    if (!sqlsrv_begin_transaction($conn)) sendJson(500, ['ok' => false, 'error' => 'Unable to start transaction.']);
+    if (!$conn->beginTransaction()) sendJson(500, ['ok' => false, 'error' => 'Unable to start transaction.']);
     try {
         runQuery($conn, "DELETE FROM consultant WHERE staff_no = ?", [$no]);
         runQuery($conn, "DELETE FROM doctor WHERE staff_no = ?", [$no]);
         runQuery($conn, "DELETE FROM staff WHERE staff_no = ?", [$no]);
-        sqlsrv_commit($conn);
+        $conn->commit();
         sendJson(200, ['ok' => true]);
     } catch (Throwable $e) {
-        sqlsrv_rollback($conn);
+        $conn->rollBack();
         sendJson(409, ['ok' => false, 'error' => 'Cannot delete this doctor due to linked records.']);
     }
 }

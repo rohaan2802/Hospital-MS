@@ -4,11 +4,12 @@ declare(strict_types=1);
 // Performance reviews API: list/meta and CRUD for review entries.
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/helpers.php';
+requireAuth();
 
 try {
-    $conn = getSqlServerConnection();
+    $conn = getConnection();
 } catch (Throwable $e) {
-    sendJson(500, ['ok' => false, 'error' => $e->getMessage()]);
+    sendJson(500, ['ok' => false, 'error' => 'Database service unavailable.']);
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -61,8 +62,8 @@ function handleCreate($conn): void
 {
     $b = getJsonInput();
     foreach (['doctor', 'reviewer', 'date', 'grade'] as $f) if (empty($b[$f]) && $b[$f] !== 0) sendJson(400, ['ok' => false, 'error' => "Missing field: {$f}"]);
-    $next = runQuery($conn, "SELECT ISNULL(MAX(review_id),0)+1 AS next_id FROM performance_review");
-    $row = sqlsrv_fetch_array($next, SQLSRV_FETCH_ASSOC);
+    $next = runQuery($conn, "SELECT COALESCE(MAX(review_id),0)+1 AS next_id FROM performance_review");
+    $row = fetchOneAssoc($next);
     $id = (int) $row['next_id'];
     runQuery(
         $conn,

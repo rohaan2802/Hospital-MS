@@ -1,27 +1,36 @@
 <?php
 declare(strict_types=1);
 
-// Creates a SQL Server connection used by all API endpoints.
-function getSqlServerConnection()
+/** Creates the MySQL connection used by all API endpoints. */
+function getConnection(): PDO
 {
-    $serverName = 'localhost';
-    $connectionInfo = [
-        'Database' => 'HospitalDB',
-        'UID' => 'scott',
-        'PWD' => 'tiger1234',
-        'CharacterSet' => 'UTF-8',
-        'TrustServerCertificate' => true
-    ];
+    $host = getenv('DB_HOST') ?: '127.0.0.1';
+    $port = getenv('DB_PORT') ?: '3306';
+    $database = getenv('DB_NAME') ?: 'hospitaldb';
+    $username = getenv('DB_USER') ?: '';
+    $password = getenv('DB_PASSWORD') ?: '';
 
-    $conn = sqlsrv_connect($serverName, $connectionInfo);
-    if ($conn === false) {
-        $errors = sqlsrv_errors(SQLSRV_ERR_ERRORS);
-        $message = 'Database connection failed.';
-        if (is_array($errors) && isset($errors[0]['message'])) {
-            $message .= ' ' . $errors[0]['message'];
-        }
-        throw new RuntimeException($message);
+    if ($username === '' || $password === '') {
+        throw new RuntimeException('Database configuration is incomplete.');
     }
 
-    return $conn;
+    $options = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+    ];
+    $sslCa = getenv('DB_SSL_CA') ?: '';
+    $sslCaContent = getenv('DB_SSL_CA_CONTENT') ?: '';
+    if ($sslCa === '' && $sslCaContent !== '') {
+        $sslCa = sys_get_temp_dir() . '/aiven-ca.pem';
+        file_put_contents($sslCa, $sslCaContent, LOCK_EX);
+        chmod($sslCa, 0600);
+    }
+    if ($sslCa !== '') {
+        $options[PDO::MYSQL_ATTR_SSL_CA] = $sslCa;
+        $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = true;
+    }
+
+    $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4', $host, $port, $database);
+    return new PDO($dsn, $username, $password, $options);
 }

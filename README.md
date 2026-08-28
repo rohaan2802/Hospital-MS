@@ -44,7 +44,7 @@ It also supports operational queries and reports required by the lab brief.
 ### Milestone 3 (this repo)
 - Frontend screens (dashboard + modules)
 - Backend REST-style APIs in PHP
-- SQL Server integration
+- MySQL integration
 - CRUD operations wired to live DB
 
 ---
@@ -52,9 +52,9 @@ It also supports operational queries and reports required by the lab brief.
 ## Tech Stack
 
 - **Frontend:** HTML, CSS, Vanilla JavaScript
-- **Backend:** PHP (sqlsrv)
-- **Database:** Microsoft SQL Server (`HospitalDB`)
-- **Local Server:** XAMPP (Apache + PHP)
+- **Backend:** PHP 8.3 (PDO MySQL)
+- **Database:** MySQL 8+ (Aiven-compatible)
+- **Deployment:** Docker + SnapDeploy
 - **IDE Debug Launch:** VS Code/Cursor `.vscode` configuration
 
 ---
@@ -193,27 +193,17 @@ Reports are read-only via:
 
 ## Running the Project
 
-## 1) Start services
+## 1) Start MySQL
 
-- Start **Apache** (XAMPP)
-- Ensure SQL Server service is running
+Create a MySQL 8+ database and import `sql/mysql_schema.sql`.
 
-## 2) Create/load DB
+## 2) Configure environment
 
-Run the full schema + seed SQL script in SQL Server Management Studio / Azure Data Studio.
+Copy `.env.example` to `.env` and set local MySQL credentials plus `APP_PASSWORD`. For Aiven, follow the deployment section below.
 
-## 3) Enable SQL Server PHP extensions
+## 3) Start the app
 
-In `C:\xampp\php\php.ini`, ensure:
-
-- `extension=sqlsrv`
-- `extension=pdo_sqlsrv`
-
-Restart Apache after changes.
-
-## 4) Open app
-
-- `http://localhost/DB_Project/MileStone%203/index.html`
+Build and run the included Dockerfile, or serve the folder through Apache with PHP 8.3 and `pdo_mysql` enabled. Open `login.html` and sign in.
 
 ---
 
@@ -267,13 +257,12 @@ Backend returns SQL-level errors when constraints fail (e.g., delete blocked by 
 
 ## Contributor Onboarding Checklist
 
-1. Clone/open project in Cursor/VS Code  
-2. Confirm SQL Server and XAMPP are running  
-3. Verify DB script loaded (`HospitalDB`)  
-4. Verify `sqlsrv` extensions are enabled  
-5. Run **Run Hospital App (Dynamic)**  
-6. Validate all module CRUD paths  
-7. Add/adjust APIs before touching UI assumptions  
+1. Clone/open project in Cursor/VS Code
+2. Create a MySQL database and import `sql/mysql_schema.sql`
+3. Set local `.env` values (never commit the file)
+4. Confirm PHP has `pdo_mysql` enabled
+5. Open `login.html` and validate module CRUD paths
+6. Add/adjust APIs before touching UI assumptions
 
 ---
 
@@ -287,6 +276,40 @@ This implementation is aligned with the hospital case brief requirements:
 - live backend communication instead of static mock state
 
 It is intended as a maintainable base for further refinement and grading/demo use.
+
+---
+
+## Free deployment: Aiven MySQL + SnapDeploy
+
+This repository is prepared for a demo deployment using Aiven's free MySQL plan and a SnapDeploy free container. The production code uses PHP 8.3, PDO MySQL, Docker, and environment variables; it no longer uses SQL Server or `sqlsrv`.
+
+### 1. Create and seed Aiven MySQL
+
+1. Create an **Aiven for MySQL** free service.
+2. Open its connection information and create/select the `defaultdb` database.
+3. Run [`sql/mysql_schema.sql`](sql/mysql_schema.sql) against that database. It creates the schema and demo records.
+4. Download the public Aiven CA certificate from `https://cdn.aiven.io/ca.pem`.
+
+### 2. Deploy with SnapDeploy
+
+1. Connect the GitHub repository and select `main`.
+2. SnapDeploy detects the included `Dockerfile`.
+3. Add these environment variables in the SnapDeploy dashboard:
+
+```text
+DB_HOST=<Aiven host>
+DB_PORT=<Aiven port>
+DB_NAME=defaultdb
+DB_USER=<Aiven username>
+DB_PASSWORD=<Aiven password>
+DB_SSL_CA_CONTENT=<entire contents of ca.pem>
+APP_USERNAME=admin
+APP_PASSWORD=<a long unique password>
+```
+
+4. Deploy and open the generated URL. The home directory opens `login.html`; sign in with `APP_USERNAME` and `APP_PASSWORD`.
+
+Never commit `.env`, Aiven credentials, or a real patient dataset. The free services are suitable only for a portfolio/demo: SnapDeploy can sleep idle containers and Aiven Free has limited storage and no high-availability SLA.
 
 ## Submission Artifact Notes
 

@@ -4,11 +4,12 @@ declare(strict_types=1);
 // Dashboard API: aggregate stats and summary widgets.
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/helpers.php';
+requireAuth();
 
 try {
-    $conn = getSqlServerConnection();
+    $conn = getConnection();
 } catch (Throwable $e) {
-    sendJson(500, ['ok' => false, 'error' => $e->getMessage()]);
+    sendJson(500, ['ok' => false, 'error' => 'Database service unavailable.']);
 }
 
 $statsStmt = runQuery(
@@ -24,7 +25,7 @@ $statsStmt = runQuery(
         (SELECT COUNT(*) FROM care_unit) AS care_units_count,
         (SELECT COUNT(*) FROM performance_review) AS reviews_count"
 );
-$stats = sqlsrv_fetch_array($statsStmt, SQLSRV_FETCH_ASSOC);
+$stats = fetchOneAssoc($statsStmt);
 
 $wardOccStmt = runQuery(
     $conn,
@@ -50,9 +51,10 @@ $specialtiesStmt = runQuery(
 
 $recentStmt = runQuery(
     $conn,
-    "SELECT TOP 6 patient_name, ward_name, date_admitted, date_discharged
+    "SELECT patient_name, ward_name, date_admitted, date_discharged
      FROM patient
-     ORDER BY date_admitted DESC, patient_no DESC"
+     ORDER BY date_admitted DESC, patient_no DESC
+     LIMIT 6"
 );
 
 sendJson(200, [

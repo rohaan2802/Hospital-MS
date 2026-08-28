@@ -4,15 +4,16 @@ declare(strict_types=1);
 // Patients API: list/meta, create, update, and delete patient records.
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/helpers.php';
+requireAuth();
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     sendJson(200, ['ok' => true]);
 }
 
 try {
-    $conn = getSqlServerConnection();
+    $conn = getConnection();
 } catch (Throwable $e) {
-    sendJson(500, ['ok' => false, 'error' => $e->getMessage()]);
+    sendJson(500, ['ok' => false, 'error' => 'Database service unavailable.']);
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -138,15 +139,15 @@ function handleCreate($conn): void
     $discharged = empty($body['discharged']) ? null : $body['discharged'];
     $bedNo = (int) $body['bed'];
 
-    if (!sqlsrv_begin_transaction($conn)) {
+    if (!$conn->beginTransaction()) {
         sendJson(500, ['ok' => false, 'error' => 'Could not start transaction.']);
     }
 
     try {
         ensureBedAvailable($conn, $bedNo, null, $discharged);
 
-        $nextStmt = runQuery($conn, "SELECT ISNULL(MAX(patient_no), 0) + 1 AS next_no FROM patient");
-        $nextRow = sqlsrv_fetch_array($nextStmt, SQLSRV_FETCH_ASSOC);
+        $nextStmt = runQuery($conn, "SELECT COALESCE(MAX(patient_no), 0) + 1 AS next_no FROM patient");
+        $nextRow = fetchOneAssoc($nextStmt);
         $nextNo = (int) ($nextRow['next_no'] ?? 1);
 
         runQuery(
@@ -169,13 +170,13 @@ function handleCreate($conn): void
             ]
         );
 
-        if (!sqlsrv_commit($conn)) {
-            sqlsrv_rollback($conn);
+        if (!$conn->commit()) {
+            $conn->rollBack();
             sendJson(500, ['ok' => false, 'error' => 'Could not commit patient admission.']);
         }
     } catch (Throwable $e) {
-        sqlsrv_rollback($conn);
-        sendJson(500, ['ok' => false, 'error' => 'Admit failed. ' . $e->getMessage()]);
+        $conn->rollBack();
+        sendJson(500, ['ok' => false, 'error' => 'Patient admission failed.']);
     }
 
     sendJson(201, ['ok' => true, 'data' => ['patient_no' => $nextNo]]);
@@ -191,7 +192,7 @@ function handleUpdate($conn): void
     $bedNo = (int) $body['bed'];
     $patientNo = (int) $body['no'];
 
-    if (!sqlsrv_begin_transaction($conn)) {
+    if (!$conn->beginTransaction()) {
         sendJson(500, ['ok' => false, 'error' => 'Could not start transaction.']);
     }
 
@@ -218,13 +219,13 @@ function handleUpdate($conn): void
             ]
         );
 
-        if (!sqlsrv_commit($conn)) {
-            sqlsrv_rollback($conn);
+        if (!$conn->commit()) {
+            $conn->rollBack();
             sendJson(500, ['ok' => false, 'error' => 'Could not commit patient update.']);
         }
     } catch (Throwable $e) {
-        sqlsrv_rollback($conn);
-        sendJson(500, ['ok' => false, 'error' => 'Update failed. ' . $e->getMessage()]);
+        $conn->rollBack();
+        sendJson(500, ['ok' => false, 'error' => 'Patient update failed.']);
     }
 
     sendJson(200, ['ok' => true]);
@@ -237,7 +238,7 @@ function ensureBedAvailable($conn, int $bedNo, ?int $excludePatientNo, ?string $
         return;
     }
 
-    $sql = "SELECT TOP 1 patient_no, patient_name
+    $sql = "SELECT patient_no, patient_name
             FROM patient
             WHERE bed_no = ? AND date_discharged IS NULL";
     $params = [$bedNo];
@@ -247,10 +248,11 @@ function ensureBedAvailable($conn, int $bedNo, ?int $excludePatientNo, ?string $
         $params[] = $excludePatientNo;
     }
 
+    $sql .= " LIMIT 1";
     $stmt = runQuery($conn, $sql, $params);
-    $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+    $row = fetchOneAssoc($stmt);
     if ($row) {
-        sqlsrv_rollback($conn);
+        $conn->rollBack();
         sendJson(409, [
             'ok' => false,
             'error' => "Bed {$bedNo} is currently occupied by {$row['patient_name']} (Patient #{$row['patient_no']}). Discharge that patient first or choose another bed."
@@ -267,19 +269,19 @@ function handleDelete($conn): void
         sendJson(400, ['ok' => false, 'error' => 'Missing patient number for delete.']);
     }
 
-    if (!sqlsrv_begin_transaction($conn)) {
+    if (!$conn->beginTransaction()) {
         sendJson(500, ['ok' => false, 'error' => 'Delete failed. Could not start transaction.']);
     }
     try {
         runQuery($conn, "DELETE FROM patient_complaint_treatment WHERE patient_no = ?", [$patientNo]);
         runQuery($conn, "DELETE FROM patient WHERE patient_no = ?", [$patientNo]);
-        if (!sqlsrv_commit($conn)) {
-            sqlsrv_rollback($conn);
+        if (!$conn->commit()) {
+            $conn->rollBack();
             sendJson(500, ['ok' => false, 'error' => 'Delete failed. Could not commit transaction.']);
         }
     } catch (Throwable $e) {
-        sqlsrv_rollback($conn);
-        sendJson(500, ['ok' => false, 'error' => 'Delete failed. ' . $e->getMessage()]);
+        $conn->rollBack();
+        sendJson(500, ['ok' => false, 'error' => 'Patient deletion failed.']);
     }
 
     sendJson(200, ['ok' => true]);
