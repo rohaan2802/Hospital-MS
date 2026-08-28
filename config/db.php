@@ -28,6 +28,8 @@ function getConnection(): PDO
         chmod($sslCa, 0600);
     } elseif ($sslCa === '' && is_file($bundledCa)) {
         $sslCa = $bundledCa;
+    } elseif ($sslCa !== '' && !preg_match('/^(?:[A-Za-z]:[\\\\\\/]|\\\\\\\\|\\/)/', $sslCa)) {
+        $sslCa = dirname(__DIR__) . '/' . ltrim($sslCa, '\\/');
     }
     if ($sslCa !== '') {
         $options[PDO::MYSQL_ATTR_SSL_CA] = $sslCa;
