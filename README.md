@@ -290,6 +290,12 @@ This repository is prepared for a demo deployment using Aiven's free MySQL plan 
 3. Run [`sql/mysql_schema.sql`](sql/mysql_schema.sql) against that database. It creates the schema and demo records.
 4. Download the public Aiven CA certificate from `https://cdn.aiven.io/ca.pem`.
 
+On Windows with XAMPP, you can instead run the included prompt-based importer. It keeps all connection values in the current terminal process only:
+
+```powershell
+.\scripts\import-aiven-schema.ps1
+```
+
 ### 2. Deploy with SnapDeploy
 
 1. Connect the GitHub repository and select `main`.
