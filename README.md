@@ -316,10 +316,18 @@ DB_USER=<Aiven username>
 DB_PASSWORD=<Aiven password>
 DB_SSL_CA_CONTENT=<entire contents of ca.pem>
 APP_USERNAME=admin
-APP_PASSWORD=<a long unique password>
+APP_PASSWORD=hospitalms
 ```
 
 4. Deploy and open the generated URL. The home directory opens `login.html`; sign in with `APP_USERNAME` and `APP_PASSWORD`.
+
+If your platform supports mounting a certificate file instead of storing the PEM text in an environment variable, use `DB_SSL_CA` and point it at the absolute path to `ca.pem`. For example:
+
+```text
+DB_SSL_CA=/app/certs/ca.pem
+```
+
+For SnapDeploy, `DB_SSL_CA_CONTENT` is usually the easiest option because it lets you paste the full certificate text directly into the dashboard. `DB_SSL_CA` is only for cases where the PEM file already exists inside the running container.
 
 Never commit `.env`, Aiven credentials, or a real patient dataset. The free services are suitable only for a portfolio/demo: SnapDeploy can sleep idle containers and Aiven Free has limited storage and no high-availability SLA.
 
