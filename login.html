@@ -3,12 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hospital MS | Sign in</title>
+  <title>Hospital MS</title>
   <link rel="stylesheet" href="css/global.css" />
   <style>body{min-height:100vh;display:grid;place-items:center}.login{width:min(420px,calc(100% - 32px));padding:32px;border:1px solid var(--border);border-radius:16px;background:var(--surface)}label,input,button{display:block;width:100%}label{margin-top:16px}input{margin-top:7px;padding:12px;border-radius:8px;border:1px solid var(--border)}button{margin-top:24px;padding:12px;border:0;border-radius:8px;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}#error{min-height:22px;color:#d33;margin-top:14px}</style>
 </head>
 <body>
-  <main class="login"><p class="eyebrow">Ivor Paine Memorial Hospital</p><h1>Sign in</h1><p>Use the credentials configured in the deployment environment.</p><form id="loginForm"><label>Username<input id="username" autocomplete="username" required></label><label>Password<input id="password" type="password" autocomplete="current-password" required></label><button>Sign in</button><p id="error" role="alert"></p></form></main>
-  <script>document.getElementById('loginForm').addEventListener('submit',async e=>{e.preventDefault();const error=document.getElementById('error');error.textContent='';try{const r=await fetch('api/auth.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:username.value,password:password.value})});const p=await r.json();if(!r.ok)throw Error(p.error||'Sign in failed');location.href='index.html'}catch(err){error.textContent=err.message}})</script>
+  <main class="login"><p class="eyebrow">Ivor Paine Memorial Hospital</p><h1>Hospital MS</h1><p>Authentication has been removed. Use the main app directly.</p><p><a href="index.html">Open dashboard</a></p></main>
 </body>
 </html>

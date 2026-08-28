@@ -199,11 +199,11 @@ Create a MySQL 8+ database and import `sql/mysql_schema.sql`.
 
 ## 2) Configure environment
 
-Copy `.env.example` to `.env` and set local MySQL credentials plus `APP_PASSWORD`. For Aiven, follow the deployment section below.
+Copy `.env.example` to `.env` and set local MySQL credentials. For Aiven, follow the deployment section below.
 
 ## 3) Start the app
 
-Build and run the included Dockerfile, or serve the folder through Apache with PHP 8.3 and `pdo_mysql` enabled. Open `login.html` and sign in.
+Build and run the included Dockerfile, or serve the folder through Apache with PHP 8.3 and `pdo_mysql` enabled. Open `index.html` directly.
 
 ---
 
@@ -261,7 +261,7 @@ Backend returns SQL-level errors when constraints fail (e.g., delete blocked by 
 2. Create a MySQL database and import `sql/mysql_schema.sql`
 3. Set local `.env` values (never commit the file)
 4. Confirm PHP has `pdo_mysql` enabled
-5. Open `login.html` and validate module CRUD paths
+5. Open `index.html` and validate module CRUD paths
 6. Add/adjust APIs before touching UI assumptions
 
 ---
@@ -314,13 +314,11 @@ DB_PORT=<Aiven port>
 DB_NAME=defaultdb
 DB_USER=<Aiven username>
 DB_PASSWORD=<Aiven password>
-DB_SSL_CA=/tmp/aiven-ca.pem
 DB_SSL_CA_CONTENT=<entire contents of ca.pem>
-APP_USERNAME=admin
-APP_PASSWORD=hospitalms
+DB_SSL_CA=/tmp/aiven-ca.pem
 ```
 
-4. Deploy and open the generated URL. The home directory opens `login.html`; sign in with `APP_USERNAME` and `APP_PASSWORD`.
+4. Deploy and open the generated URL. The home directory opens the dashboard directly.
 
 If your platform supports mounting a certificate file instead of storing the PEM text in an environment variable, use `DB_SSL_CA` and point it at the absolute path to `ca.pem`. For example:
 
