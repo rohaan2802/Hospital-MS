@@ -1,0 +1,40 @@
+name: Aiven DB Heartbeat
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping-db:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install MySQL client
+        run: sudo apt-get update && sudo apt-get install -y mysql-client
+
+      - name: Write CA certificate
+        env:
+          AIVEN_CA_PEM: ${{ secrets.AIVEN_CA_PEM }}
+        run: |
+          if [ -z "$AIVEN_CA_PEM" ]; then
+            echo "AIVEN_CA_PEM secret is missing."
+            exit 1
+          fi
+          printf '%s' "$AIVEN_CA_PEM" > aiven-ca.pem
+
+      - name: Ping Aiven DB
+        env:
+          MYSQL_PWD: ${{ secrets.AIVEN_DB_PASSWORD }}
+          AIVEN_DB_HOST: ${{ secrets.AIVEN_DB_HOST }}
+          AIVEN_DB_PORT: ${{ secrets.AIVEN_DB_PORT }}
+          AIVEN_DB_USER: ${{ secrets.AIVEN_DB_USER }}
+          AIVEN_DB_NAME: ${{ secrets.AIVEN_DB_NAME }}
+        run: |
+          mysql \
+            --host="$AIVEN_DB_HOST" \
+            --port="$AIVEN_DB_PORT" \
+            --user="$AIVEN_DB_USER" \
+            --database="$AIVEN_DB_NAME" \
+            --ssl-ca=aiven-ca.pem \
+            --ssl-mode=VERIFY_CA \
+            -e "SELECT 1;"
