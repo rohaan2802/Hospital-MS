@@ -1,5 +1,7 @@
 # Ivor Paine Memorial Hospital (IPMH) - Database Project
 
+### 🚀 [CLICK HERE TO VIEW LIVE DEMO](https://hospitalms-0899b.containers.snapdeploy.app)
+
 ## Overview
 
 This project implements a Hospital Management System for the **Ivor Paine Memorial Hospital** case study.  
