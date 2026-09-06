@@ -1,5 +1,13 @@
 # Ivor Paine Memorial Hospital (IPMH) Management System
 
+## Project screenshots
+
+The dashboard preview below presents the hospital operations workspace on desktop and mobile: KPI cards, ward occupancy, specialties, care utilization, recent admissions, and quick actions are all visible in the responsive composition.
+
+![IPMH hospital dashboard desktop and mobile preview](docs/screenshots/preview.webp)
+
+Individual captures: [desktop](docs/screenshots/desktop.webp) · [mobile](docs/screenshots/mobile.webp)
+
 A premium, recruiter-friendly hospital management dashboard designed to present a realistic healthcare operations workflow with modern UI styling, responsive layout, and database-backed structure.
 
 ## Live Demo
