@@ -24,6 +24,35 @@
     el.textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   }
 
+  // theme toggle
+  const defaultTheme = localStorage.getItem('ipmh-theme') || 'dark';
+  document.body.classList.toggle('light-mode', defaultTheme === 'light');
+
+  const headerActions = document.querySelector('.page-header-actions');
+  if (headerActions && !headerActions.querySelector('.theme-toggle')) {
+    const toggleBtn = document.createElement('button');
+    toggleBtn.type = 'button';
+    toggleBtn.className = 'theme-toggle';
+    toggleBtn.setAttribute('aria-label', 'Toggle theme');
+    toggleBtn.innerHTML = '<span class="theme-icon">☀</span><span class="theme-label">Light</span>';
+
+    const updateToggleText = () => {
+      const isLight = document.body.classList.contains('light-mode');
+      toggleBtn.innerHTML = isLight
+        ? '<span class="theme-icon">🌙</span><span class="theme-label">Dark</span>'
+        : '<span class="theme-icon">☀</span><span class="theme-label">Light</span>';
+      localStorage.setItem('ipmh-theme', isLight ? 'light' : 'dark');
+    };
+
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      updateToggleText();
+    });
+
+    updateToggleText();
+    headerActions.appendChild(toggleBtn);
+  }
+
   // toast system
   window.showToast = function(msg, type='success'){
     let container = document.getElementById('toastContainer');

@@ -12,8 +12,12 @@
     }, 30);
   }
 
-  function renderDashboard(data) {
-      const stats = data.stats || {};
+  function renderDashboard(data = {}) {
+      const safeData = data && typeof data === 'object' ? data : {};
+      const stats = safeData.stats || {};
+      const wardOccupancy = Array.isArray(safeData.ward_occupancy) ? safeData.ward_occupancy : [];
+      const specialties = Array.isArray(safeData.specialties) ? safeData.specialties : [];
+      const recentAdmissions = Array.isArray(safeData.recent_admissions) ? safeData.recent_admissions : [];
 
       const statEls = document.querySelectorAll('.stat-number');
       if (statEls[0]) animateTo(statEls[0], Number(stats.total_patients || 0));
@@ -24,7 +28,7 @@
       const barsEl = document.getElementById('wardBars');
       if (barsEl) {
         barsEl.innerHTML = '';
-        data.ward_occupancy.forEach((w, i) => {
+        wardOccupancy.forEach((w, i) => {
           const capacity = Number(w.capacity || 0);
           const occupied = Number(w.occupied || 0);
           const pct = capacity ? Math.round((occupied / capacity) * 100) : 0;
@@ -48,11 +52,11 @@
       const specEl = document.getElementById('specialtyList');
       if (specEl) {
         specEl.innerHTML = '';
-        data.specialties.slice(0, 8).forEach((s, i) => {
+        specialties.slice(0, 8).forEach((s, i) => {
           specEl.innerHTML += `
             <div class="specialty-item">
               <div class="specialty-dot" style="background:${colors[i % colors.length]}"></div>
-              <span class="specialty-name">${s.specialty_name}</span>
+              <span class="specialty-name">${s.specialty_name || '—'}</span>
               <span class="specialty-ward">${s.ward_name || '—'}</span>
             </div>`;
         });
@@ -60,7 +64,7 @@
 
       const tbody = document.getElementById('recentPatientsBody');
       if (tbody) {
-        tbody.innerHTML = data.recent_admissions
+        tbody.innerHTML = recentAdmissions
           .map((p) => {
             const status = p.date_discharged
               ? `<span class="badge badge-green">Discharged</span>`

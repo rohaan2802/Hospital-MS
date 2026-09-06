@@ -1,263 +1,210 @@
-# Ivor Paine Memorial Hospital (IPMH) - Database Project
+# Ivor Paine Memorial Hospital (IPMH) Management System
 
-### 🚀 [CLICK HERE TO VIEW LIVE DEMO](https://hospitalms-0899b.containers.snapdeploy.app)
+A premium hospital operations dashboard and full database-backed management platform for the Ivor Paine Memorial Hospital case study.
 
-## Overview
+## Live Demo
 
-This project implements a Hospital Management System for the **Ivor Paine Memorial Hospital** case study.  
-It is built as a milestone-based academic project covering:
+- Live app: https://hospitalms-0899b.containers.snapdeploy.app
+- Project repo: https://github.com/rohaan2802/Hospital-MS
 
-- Requirement analysis
-- ER/EER to relational mapping
-- SQL schema design + normalization + constraints
-- Initial dataset population
-- Frontend development
-- Backend/API integration with SQL Server
+## Project Summary
 
-This repository is the **Milestone 3 implementation** with integrated frontend + backend APIs.
+This project was built to simulate a real-world hospital information system with a modern recruiter-friendly frontend and a database-backed backend. It covers patient intake, doctor and nurse management, ward and bed allocation, complaints and treatment tracking, performance reviews, and required reporting queries.
 
----
+The system is designed to feel operational, professional, and presentation-ready while still staying aligned with the academic database requirements.
 
-## Project Objectives
+## Core Features
 
-The system is designed to manage:
+- Executive dashboard with live summary cards
+- Ward occupancy visualization
+- Specialty overview and operational stats
+- Patient admission and record management
+- Doctor and consultant assignment workflows
+- Nurse and unit coordination management
+- Complaints and treatment logging
+- Performance review tracking
+- Required report querying page for all assignment queries
+- Responsive UI for mobile, tablet, laptop, and desktop screens
+- Database-driven CRUD operations powered by PHP + MySQL
 
-- Wards, specialties, care units, beds
-- Staff hierarchy (staff, doctors, consultants, nurses)
-- Patient admissions and assignments
-- Complaints and treatment history
-- Doctor experience and performance reviews
+## Stack
 
-It also supports operational queries and reports required by the lab brief.
+- Frontend: HTML, CSS, Vanilla JavaScript
+- Backend: PHP 8+
+- Database: MySQL 8+
+- UI style: premium dashboard design with responsive layouts
+- Deployment: Docker / PHP hosting / SnapDeploy-compatible setup
 
----
-
-## Milestone Breakdown
-
-### Milestone 1
-- ER/EER design
-- Relational mapping
-
-### Milestone 2
-- Database schema (DDL)
-- Constraints (PK/FK/UNIQUE/CHECK)
-- Seed data insertion
-
-### Milestone 3 (this repo)
-- Frontend screens (dashboard + modules)
-- Backend REST-style APIs in PHP
-- MySQL integration
-- CRUD operations wired to live DB
-
----
-
-## Tech Stack
-
-- **Frontend:** HTML, CSS, Vanilla JavaScript
-- **Backend:** PHP 8.3 (PDO MySQL)
-- **Database:** MySQL 8+ (Aiven-compatible)
-- **Deployment:** Docker + SnapDeploy
-- **IDE Debug Launch:** VS Code/Cursor `.vscode` configuration
-
----
-
-## Current Project Structure
+## Folder Structure
 
 ```text
-MileStone 3/
-  api/
-    complaints.php
-    dashboard.php
-    doctors.php
-    helpers.php
-    nurses.php
-    patients.php
-    reviews.php
-    wards.php
-  config/
-    db.php
-  css/
-  js/
-    api.js
-    complaints.js
-    dashboard.js
-    doctors.js
-    nav.js
-    nurses.js
-    patients.js
-    reviews.js
-    wards.js
-    data.js (legacy mock data; no longer used by pages)
-  .vscode/
-    launch.json
-    run-app.ps1
-  docs/
-    ENTITY_MAPPING.md
-    TABLE_DESCRIPTIONS.md
-  *.html
+Hospital-MS/
+├── api/
+│   ├── dashboard.php
+│   ├── patients.php
+│   ├── doctors.php
+│   ├── nurses.php
+│   ├── wards.php
+│   ├── complaints.php
+│   ├── reviews.php
+│   ├── reports.php
+│   └── helpers.php
+├── config/
+│   └── db.php
+├── css/
+│   ├── global.css
+│   ├── dashboard.css
+│   └── pages.css
+├── js/
+│   ├── api.js
+│   ├── nav.js
+│   ├── live-sync.js
+│   ├── dashboard.js
+│   ├── patients.js
+│   ├── doctors.js
+│   ├── nurses.js
+│   ├── wards.js
+│   ├── complaints.js
+│   ├── reviews.js
+│   ├── reports.js
+│   └── data.js
+├── sql/
+│   ├── mysql_schema.sql
+│   ├── seed_data.sql
+│   └── reports_queries.sql
+├── docs/
+│   ├── ENTITY_MAPPING.md
+│   └── TABLE_DESCRIPTIONS.md
+├── .env.example
+├── Dockerfile
+├── index.html
+├── patients.html
+├── doctors.html
+├── nurses.html
+├── wards.html
+├── complaints.html
+├── reviews.html
+├── reports.html
+├── README.md
+├── .gitignore
+└── .vscode/
+    ├── launch.json
+    └── run-app.ps1
 ```
 
----
+## How It Works
 
-## Database Configuration
+The app uses a structured PHP API layer to query and update the hospital database. Each page reads and writes through endpoint-specific handlers, while the front end renders dashboards and tables in a clean, operational format.
 
-Configured in `config/db.php`:
+### Main Pages
 
-- Database: `HospitalDB`
-- Username: `scott`
-- Password: `tiger1234`
-- Server: `localhost` (change if using named instance)
+- Dashboard: hospital KPIs and occupancy overview
+- Patients: admissions, ward allocation, doctor assignment, bed status
+- Doctors: staff records, consultant mapping, team structure
+- Nurses: staff records and care-unit coverage
+- Wards & Beds: occupancy and bed resource tracking
+- Complaints & Treatments: clinical issue tracking workflow
+- Reviews: staff performance review management
+- Reports: required query execution page for academic assignment tasks
 
-If needed for named instance, set server like:
-- `localhost\\SQLEXPRESS`
+## Database Design Highlights
 
----
+This system is built around the core hospital entity model:
 
-## Modules Implemented
+- staff
+- doctor
+- nurse
+- patient
+- ward
+- bed
+- care_unit
+- specialty
+- complaint
+- treatment
+- performance_review
+- consultant
 
-### 1) Dashboard
-- Hospital totals (patients, doctors, nurses, beds)
-- Ward occupancy
-- Specialties summary
-- Recent admissions
+The schema supports relational integrity, operational constraints, and assignment logic required by a realistic hospital workflow.
 
-### 2) Patients
-- List/search/filter patients
-- Add (admit), update, delete
-- Ward/bed/doctor/consultant binding from live DB metadata
+## Local Setup
 
-### 3) Doctors
-- List/search/filter doctors
-- Add/update/delete doctor records
-- Consultant assignment
+### 1. Prepare the database
 
-### 4) Nurses
-- List/search/filter nurses
-- Add/update/delete nurse records
-- Ward and care-unit mapping
+Create a MySQL database and import the schema from `sql/mysql_schema.sql`.
 
-### 5) Wards & Beds
-- Ward cards with specialty + care unit
-- Bed occupancy visualization (occupied/free)
+### 2. Configure database credentials
 
-### 6) Complaints & Treatments
-- Complaint-treatment records listing
-- Add treatment logs
-- Delete treatment logs
-- Complaint/treatment lookup tabs with usage counts
+Update `config/db.php` or the environment variables used by your local environment.
 
-### 7) Performance Reviews
-- Review listing/filtering
-- Add/update/delete performance reviews
+### 3. Run the PHP app
 
-### 8) Required Reports (12 Queries)
-- Dedicated page: `reports.html`
-- API endpoint: `api/reports.php?q=1..12`
-- Supports parameterized required queries:
-  - q9 uses `doctor_no`
-  - q10 uses `patient_no`
-  - q11 uses `complaint_code`, `from_date`, `to_date`
-- SQL deliverable file included: `sql/reports_queries.sql`
+Serve the project with PHP or Docker. A typical local flow is:
 
----
+```bash
+php -S localhost:8000
+```
 
-## API Endpoints
+Then open:
 
-### `GET` endpoints
+```text
+http://localhost:8000/index.html
+```
 
-- `api/dashboard.php`
-- `api/patients.php`
-- `api/patients.php?meta=1`
-- `api/doctors.php`
-- `api/doctors.php?meta=1`
-- `api/nurses.php`
-- `api/nurses.php?meta=1`
-- `api/wards.php`
-- `api/complaints.php`
-- `api/complaints.php?meta=1`
-- `api/complaints.php?lookup=1`
-- `api/reviews.php`
-- `api/reviews.php?meta=1`
-- `api/reports.php?q=1..12`
+## Deployment Notes
 
-### `POST / PUT / DELETE`
+This project is designed to be deployable in a PHP-compatible hosting environment. The static frontend is lightweight and the backend APIs are simple, portable, and easy to host.
 
-- `api/patients.php`
-- `api/doctors.php`
-- `api/nurses.php`
-- `api/complaints.php` (POST/DELETE)
-- `api/reviews.php`
- 
-Reports are read-only via:
-- `api/reports.php`
+## Report Queries Included
 
----
+The project includes required analytical queries for the assignment, including:
 
-## Running the Project
+- consultant team structure
+- ward and sister coverage
+- patient complaints and treatment history
+- doctor review analysis
+- patient-specific medical summary
+- treatment lookup by date range
+- staff position counts
 
-## 1) Start MySQL
+These are exposed through the `reports.html` UI and `api/reports.php`.
 
-Create a MySQL 8+ database and import `sql/mysql_schema.sql`.
+## Use Cases
 
-## 2) Configure environment
+This project is suitable for:
 
-Copy `.env.example` to `.env` and set local MySQL credentials. For Aiven, follow the deployment section below.
+- academic database project submission
+- hospital operations dashboard demonstration
+- portfolio project showcasing data-backed CRUD workflows
+- recruiter-facing front-end + backend project presentation
 
-## 3) Start the app
+## Notes
 
-Build and run the included Dockerfile, or serve the folder through Apache with PHP 8.3 and `pdo_mysql` enabled. Open `index.html` directly.
+- `js/data.js` is legacy mock data and is not the primary source of app data.
+- Active pages use the live API layer and database-backed endpoints.
+- The project keeps a balance between academic requirements and a premium visual presentation.
 
----
+## Future Improvements
 
-## Run & Debug (Dynamic Path)
+Potential upgrades for a next version:
 
-This project includes a dynamic launch config:
+- role-based authentication
+- cloud sync or login flow
+- PDF/Excel export
+- advanced analytics charts
+- drag-and-drop ward planning
+- audit logging and user actions
+- stronger server-side validation and admin roles
 
-- `.vscode/launch.json`
-- `.vscode/run-app.ps1`
+## Contributors
 
-Use **Run and Debug** -> **Run Hospital App (Dynamic)**.
+- Zohaib Hassan
+- Mohammad Rohaan
+- Shehryar Ahmad
+- Tehreem Shakeel
 
-It:
-- Uses current `${workspaceFolder}` dynamically
-- Starts a local PHP server on a free port
-- Opens browser automatically
-- Avoids hardcoded project folder URL path
+## License
 
----
-
-## Frontend Integration Notes
-
-- `js/data.js` is legacy mock dataset and is no longer loaded by pages.
-- All active modules use API calls through `js/api.js`.
-- Each page now performs live CRUD against SQL Server-backed endpoints.
-
----
-
-## Data Integrity / Constraint Considerations
-
-The DB schema enforces:
-
-- PK/FK relations
-- unique bed assignment per patient
-- date validity checks
-- staff subtype structure
-
-Backend returns SQL-level errors when constraints fail (e.g., delete blocked by dependencies).
-
----
-
-## Known Limitations / Next Improvements
-
-- Add a dedicated `api/reports.php` for all 12 required assignment queries in one place
-- Add server-side validation helpers per entity (centralized)
-- Add pagination/filtering on API side for larger datasets
-- Add auth/roles if required by future scope
-- Add transaction-safe standardized error envelopes
-
----
-
-## Contributor Onboarding Checklist
+This project is intended for educational and portfolio use.
 
 1. Clone/open project in Cursor/VS Code
 2. Create a MySQL database and import `sql/mysql_schema.sql`

@@ -13,16 +13,17 @@
     return label.replace(/_/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
   }
 
-  function renderRows(rows) {
-    if (!rows.length) {
+  function renderRows(rows = []) {
+    const safeRows = Array.isArray(rows) ? rows : [];
+    if (!safeRows.length) {
       head.innerHTML = '';
       body.innerHTML = '<tr><td><div class="empty-state"><p>No records returned</p></div></td></tr>';
       return;
     }
 
-    const cols = Object.keys(rows[0]);
+    const cols = Object.keys(safeRows[0]);
     head.innerHTML = `<tr>${cols.map((c) => `<th>${toHeader(c)}</th>`).join('')}</tr>`;
-    body.innerHTML = rows
+    body.innerHTML = safeRows
       .map((row) => `<tr>${cols.map((c) => `<td>${row[c] ?? ''}</td>`).join('')}</tr>`)
       .join('');
   }
