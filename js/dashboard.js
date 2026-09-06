@@ -45,7 +45,13 @@
 
     const labelLine = data.map((item, index) => {
       const x = padding + (index * (width - padding * 2)) / Math.max(data.length - 1, 1);
-      return `<text x="${x}" y="${height - 8}" fill="#8aa1c7" font-size="9" text-anchor="middle">${(item.ward || '').slice(0, 4)}</text>`;
+      const rawLabel = String(item.ward || '').trim();
+      const compactLabel = rawLabel
+        .replace(/Ward/gi, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+      const shortLabel = compactLabel.length > 4 ? compactLabel.slice(0, 4) : compactLabel;
+      return `<text x="${x}" y="${height - 8}" fill="#8aa1c7" font-size="${data.length > 6 ? 7 : 9}" text-anchor="middle">${shortLabel || '—'}</text>`;
     }).join('');
 
     chartEl.innerHTML = `
