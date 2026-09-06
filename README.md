@@ -215,10 +215,7 @@ This project focuses on a realistic hospital work environment while keeping the 
 
 ## Contributors
 
-- Zohaib Hassan
 - Mohammad Rohaan
-- Shehryar Ahmad
-- Tehreem Shakeel
 
 ## License
 
@@ -231,4 +228,3 @@ The system is intentionally built to be practical, responsive, and visually pres
 ---
 
 This repository reflects the final stage of the hospital dashboard enhancement work, including dark-mode premium presentation, responsive layouts, patient and operations modules, analytics panels, and polished light-mode usability.
-
