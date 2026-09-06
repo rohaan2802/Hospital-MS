@@ -1,39 +1,55 @@
 # Ivor Paine Memorial Hospital (IPMH) Management System
 
-A premium hospital operations dashboard and full database-backed management platform for the Ivor Paine Memorial Hospital case study.
+A premium, recruiter-friendly hospital management dashboard designed to present a realistic healthcare operations workflow with modern UI styling, responsive layout, and database-backed structure.
 
 ## Live Demo
 
 - Live app: https://hospitalms-0899b.containers.snapdeploy.app
-- Project repo: https://github.com/rohaan2802/Hospital-MS
+- GitHub repository: https://github.com/rohaan2802/Hospital-MS
 
-## Project Summary
+## Project Overview
 
-This project was built to simulate a real-world hospital information system with a modern recruiter-friendly frontend and a database-backed backend. It covers patient intake, doctor and nurse management, ward and bed allocation, complaints and treatment tracking, performance reviews, and required reporting queries.
+This project was built as a professional hospital administration dashboard with a strong focus on presentation quality, usability, and operational realism. It simulates a multi-department hospital system covering patient administration, doctor and nurse staffing, ward occupancy, complaints and treatment workflows, reviews, and reporting.
 
-The system is designed to feel operational, professional, and presentation-ready while still staying aligned with the academic database requirements.
+The application is designed to feel polished enough for a recruiter demo while still being logically grounded in a relational hospital data model.
 
-## Core Features
+## What Has Been Implemented
 
-- Executive dashboard with live summary cards
-- Ward occupancy visualization
-- Specialty overview and operational stats
-- Patient admission and record management
-- Doctor and consultant assignment workflows
-- Nurse and unit coordination management
-- Complaints and treatment logging
-- Performance review tracking
-- Required report querying page for all assignment queries
-- Responsive UI for mobile, tablet, laptop, and desktop screens
-- Database-driven CRUD operations powered by PHP + MySQL
+### Premium dashboard experience
+- executive KPI cards for total patients, doctors, nurses, beds, occupancy, and care coverage
+- operations summary strip for quick status cues
+- modern analytics panel with ward utilization and activity visualization
+- premium card styling, gradients, and soft glass-like UI treatment
+- dark-first design with contrast-rich colors for portfolio presentation
 
-## Stack
+### Clinical and administrative modules
+- patient management dashboard with filters and record details
+- doctor and nurse listings with role mapping
+- ward and bed occupancy tracking
+- complaints and treatment workflows
+- performance review panel
+- reports page for required queries and summaries
 
-- Frontend: HTML, CSS, Vanilla JavaScript
-- Backend: PHP 8+
-- Database: MySQL 8+
-- UI style: premium dashboard design with responsive layouts
-- Deployment: Docker / PHP hosting / SnapDeploy-compatible setup
+### Responsive and presentation-ready UX
+- optimized layout for mobile, tablet, laptop, and desktop screens
+- sidebar transitions and mobile-friendly top bar
+- flexible grid layouts for varying device widths
+- tables wrapped in scrollable containers to avoid overflow on small screens
+- refined spacing and typography to improve readability across devices
+
+### Theme system and interface polish
+- dark theme as the default premium presentation mode
+- light mode toggle that switches the interface to a clean, bright clinical palette
+- no dark-heavy surfaces remain in light mode; the UI becomes consistently light with soft contrast
+- improved hover states, badge styling, modal contrast, and action buttons
+
+## Technology Stack
+
+- Frontend: HTML, CSS, JavaScript
+- Backend: PHP
+- Database: MySQL
+- Styling: custom CSS design system with responsive layout rules
+- Deployment-ready: Docker / PHP host / SnapDeploy compatible
 
 ## Folder Structure
 
@@ -58,7 +74,6 @@ Hospital-MS/
 ├── js/
 │   ├── api.js
 │   ├── nav.js
-│   ├── live-sync.js
 │   ├── dashboard.js
 │   ├── patients.js
 │   ├── doctors.js
@@ -92,24 +107,20 @@ Hospital-MS/
     └── run-app.ps1
 ```
 
-## How It Works
+## Main Pages
 
-The app uses a structured PHP API layer to query and update the hospital database. Each page reads and writes through endpoint-specific handlers, while the front end renders dashboards and tables in a clean, operational format.
+- Dashboard: hospital KPIs, occupancy overview, summary cards, analytics
+- Patients: patient records, admissions, ward and bed tracking
+- Doctors: doctor records and consultant mapping
+- Nurses: staffing and unit-based nursing coverage
+- Wards & Beds: bed utilization and ward performance
+- Complaints & Treatments: clinical issue and care tracking
+- Reviews: performance review monitoring
+- Reports: query-based reporting and database insights
 
-### Main Pages
+## Data Model Highlights
 
-- Dashboard: hospital KPIs and occupancy overview
-- Patients: admissions, ward allocation, doctor assignment, bed status
-- Doctors: staff records, consultant mapping, team structure
-- Nurses: staff records and care-unit coverage
-- Wards & Beds: occupancy and bed resource tracking
-- Complaints & Treatments: clinical issue tracking workflow
-- Reviews: staff performance review management
-- Reports: required query execution page for academic assignment tasks
-
-## Database Design Highlights
-
-This system is built around the core hospital entity model:
+The system is based on a realistic hospital entity structure:
 
 - staff
 - doctor
@@ -124,7 +135,32 @@ This system is built around the core hospital entity model:
 - performance_review
 - consultant
 
-The schema supports relational integrity, operational constraints, and assignment logic required by a realistic hospital workflow.
+This structure supports relational integrity, multi-department coordination, and operational workflows expected in a real hospital information system.
+
+## Light Theme Behavior
+
+The UI includes a theme toggle that switches between two visual modes:
+
+- Dark mode: premium, modern, and high-contrast dashboard presentation
+- Light mode: clean healthcare-friendly palette with bright surfaces, soft shadows, and airy spacing
+
+When the light theme is activated, the interface avoids dark backgrounds and uses lighter cards, pale gradients, and readable contrast for a clean presentation experience.
+
+## Responsive Design Notes
+
+The dashboard is optimized for:
+
+- mobile phones
+- tablets
+- laptops
+- widescreen desktops
+
+Specific design decisions include:
+- flexible grid layouts
+- collapsible sidebar on smaller screens
+- stacked action buttons on narrow widths
+- horizontally scrollable tables for data-heavy pages
+- readable typography and controlled spacing in compact layouts
 
 ## Local Setup
 
@@ -132,13 +168,13 @@ The schema supports relational integrity, operational constraints, and assignmen
 
 Create a MySQL database and import the schema from `sql/mysql_schema.sql`.
 
-### 2. Configure database credentials
+### 2. Configure environment values
 
-Update `config/db.php` or the environment variables used by your local environment.
+Update `config/db.php` or your environment variables according to your local database configuration.
 
-### 3. Run the PHP app
+### 3. Run the application
 
-Serve the project with PHP or Docker. A typical local flow is:
+From the project root, start a PHP server:
 
 ```bash
 php -S localhost:8000
@@ -152,48 +188,30 @@ http://localhost:8000/index.html
 
 ## Deployment Notes
 
-This project is designed to be deployable in a PHP-compatible hosting environment. The static frontend is lightweight and the backend APIs are simple, portable, and easy to host.
+This project is deployable in a PHP-compatible hosting environment and is designed to work cleanly in a standard demo deployment setup. It is suitable for a portfolio project or academic submission because it balances backend logic with a polished frontend presentation.
 
-## Report Queries Included
+## Reports and Query Coverage
 
-The project includes required analytical queries for the assignment, including:
+The project includes analytical reporting for hospital operations, including:
 
-- consultant team structure
-- ward and sister coverage
-- patient complaints and treatment history
-- doctor review analysis
-- patient-specific medical summary
-- treatment lookup by date range
-- staff position counts
+- consultant and specialty mapping
+- ward occupancy summary
+- patient complaint and treatment tracking
+- doctor review indicators
+- patient-specific historical summary views
+- treatment and care lookups by date range
+- staffing distribution
 
-These are exposed through the `reports.html` UI and `api/reports.php`.
+These features are surfaced via the `reports.html` page and backend reporting modules.
 
-## Use Cases
+## Why This Project Stands Out
 
-This project is suitable for:
+This project focuses on a realistic hospital work environment while keeping the interface elegant and recruiter-friendly. It combines operational utility with premium visual design, making it appropriate for:
 
 - academic database project submission
-- hospital operations dashboard demonstration
-- portfolio project showcasing data-backed CRUD workflows
-- recruiter-facing front-end + backend project presentation
-
-## Notes
-
-- `js/data.js` is legacy mock data and is not the primary source of app data.
-- Active pages use the live API layer and database-backed endpoints.
-- The project keeps a balance between academic requirements and a premium visual presentation.
-
-## Future Improvements
-
-Potential upgrades for a next version:
-
-- role-based authentication
-- cloud sync or login flow
-- PDF/Excel export
-- advanced analytics charts
-- drag-and-drop ward planning
-- audit logging and user actions
-- stronger server-side validation and admin roles
+- healthcare management dashboard demo
+- portfolio showcase for frontend and backend integration
+- presentation to recruiters and evaluators
 
 ## Contributors
 
@@ -204,103 +222,13 @@ Potential upgrades for a next version:
 
 ## License
 
-This project is intended for educational and portfolio use.
+This project is intended for educational, portfolio, and demonstration purposes.
 
-1. Clone/open project in Cursor/VS Code
-2. Create a MySQL database and import `sql/mysql_schema.sql`
-3. Set local `.env` values (never commit the file)
-4. Confirm PHP has `pdo_mysql` enabled
-5. Open `index.html` and validate module CRUD paths
-6. Add/adjust APIs before touching UI assumptions
+## Final Notes
+
+The system is intentionally built to be practical, responsive, and visually presentable without overcomplicating the implementation. It remains lightweight enough for local testing while still feeling like a polished healthcare management application.
 
 ---
 
-## Academic Context
-
-This implementation is aligned with the hospital case brief requirements:
-
-- relationally mapped hospital model
-- integrated data operations
-- frontend forms/reports structure
-- live backend communication instead of static mock state
-
-It is intended as a maintainable base for further refinement and grading/demo use.
-
----
-
-## Free deployment: Aiven MySQL + SnapDeploy
-
-This repository is prepared for a demo deployment using Aiven's free MySQL plan and a SnapDeploy free container. The production code uses PHP 8.3, PDO MySQL, Docker, and environment variables; it no longer uses SQL Server or `sqlsrv`.
-
-### 1. Create and seed Aiven MySQL
-
-1. Create an **Aiven for MySQL** free service.
-2. Open its connection information and create/select the `defaultdb` database.
-3. Run [`sql/mysql_schema.sql`](sql/mysql_schema.sql) against that database. It creates the schema and demo records.
-4. Download the public Aiven CA certificate from `https://cdn.aiven.io/ca.pem`.
-
-On Windows with XAMPP, you can instead run the included prompt-based importer. It keeps all connection values in the current terminal process only:
-
-```powershell
-.\scripts\import-aiven-schema.ps1
-```
-
-If the certificate download is blocked by your network, download the CA certificate from Aiven Console > your MySQL service > Connection information and pass its path instead:
-
-```powershell
-.\scripts\import-aiven-schema.ps1 -CaCertificatePath "C:\Users\YourName\Downloads\ca.pem"
-```
-
-### 2. Deploy with SnapDeploy
-
-1. Connect the GitHub repository and select `main`.
-2. SnapDeploy detects the included `Dockerfile`.
-3. Add these environment variables in the SnapDeploy dashboard:
-
-```text
-DB_HOST=mysql-1151d526-project-ec1.h.aivencloud.com
-DB_PORT=25038
-DB_NAME=hospitalms
-DB_USER=avnadmin
-DB_PASSWORD=<your Aiven MySQL password>
-DB_SSL_CA=certs/aiven-ca.pem
-```
-
-4. Deploy and open the generated URL. The home directory opens the dashboard directly.
-
-The repository now includes the public Aiven CA certificate at `certs/aiven-ca.pem`, and the app will use it automatically if `DB_SSL_CA_CONTENT` is not set. If your deployment platform lets you mount a different certificate path, you can still override `DB_SSL_CA`.
-
-### 3. Live deployment details
-
-Live URL: `ADD_YOUR_SNAPDEPLOY_URL_HERE`
-
-Deployment notes:
-
-- The app now opens directly without a sign-in screen.
-- Database access uses the bundled Aiven CA certificate at `certs/aiven-ca.pem`.
-- The database name for this deployment is `hospitalms`, not Aiven's default `defaultdb`.
-- The `DB_PASSWORD` value above is the Aiven MySQL password shown in the console.
-- If SnapDeploy redeploys from GitHub, make sure it is pulling the latest `main` branch.
-
-### 4. Keeping the service warm
-
-GitHub Actions can run scheduled workflows, but the shortest supported interval is once every 5 minutes, and scheduled runs may be delayed or dropped during heavy load. GitHub also notes that scheduled workflows only run from the default branch and can be disabled after 60 days of inactivity in public repositories.
-
-So:
-
-- `every 3 minutes` is not a good fit for GitHub Actions.
-- `every 5 minutes` is the practical minimum on GitHub Actions.
-- GitHub Actions is okay for a simple heartbeat to an HTTP endpoint, but it is not a guarantee that a free database or container will never sleep.
-- If SnapDeploy or Aiven already provides a built-in keep-alive or health check, use that first.
-- If you want a true heartbeat, use a scheduled workflow that calls the app URL or a health endpoint every 5 minutes.
-
-This repository includes a DB health endpoint at `api/health.php`. If you want an automatic keep-alive, add a GitHub Actions workflow that calls that endpoint every 5 minutes and store the deployed URL in a GitHub Actions secret named `HEALTHCHECK_URL`, for example `https://your-app.example.com/api/health.php`.
-
-Never commit `.env`, Aiven credentials, or a real patient dataset. The free services are suitable only for a portfolio/demo: SnapDeploy can sleep idle containers and Aiven Free has limited storage and no high-availability SLA.
-
-## Submission Artifact Notes
-
-- ER/EER diagram file should be added to this repository (for example in `docs/`).
-- Relational mapping summary is documented in `docs/ENTITY_MAPPING.md`.
-- Table descriptions are documented in `docs/TABLE_DESCRIPTIONS.md`.
+This repository reflects the final stage of the hospital dashboard enhancement work, including dark-mode premium presentation, responsive layouts, patient and operations modules, analytics panels, and polished light-mode usability.
 
