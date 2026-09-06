@@ -5,6 +5,7 @@
   let filtered = [];
   let deleteTarget = null;
   let patients = [];
+  let activeChip = 'all';
   let meta = { wards: [], doctors: [], consultants: [], beds: [], care_units: [], occupied_beds: [] };
 
   const avatarColors = ['avatar-blue', 'avatar-green', 'avatar-purple', 'avatar-orange'];
@@ -67,6 +68,9 @@
       if (ward && p.ward !== ward) return false;
       if (status === 'admitted' && p.discharged) return false;
       if (status === 'discharged' && !p.discharged) return false;
+      if (activeChip === 'admitted' && p.discharged) return false;
+      if (activeChip === 'discharged' && !p.discharged) return false;
+      if (activeChip === 'critical' && !(p.ward && ['ICU', 'Emergency', 'Critical Care'].includes(p.ward))) return false;
       return true;
     });
 
@@ -96,6 +100,9 @@
           <td>${p.admitted}</td>
           <td>${statusBadge}</td>
           <td><div class="row-actions">
+            <button class="icon-btn view" title="View" onclick="openPatientDetail(${p.no})">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>
+            </button>
             <button class="icon-btn edit" title="Edit" onclick="editPatient(${p.no})">
               <svg viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2"/></svg>
             </button>
@@ -118,18 +125,52 @@
   }
 
   async function fetchSnapshot() {
-    const [list, metaInfo] = await Promise.all([
+    const [listResult, metaResult] = await Promise.all([
       API.get('api/patients.php'),
       API.get('api/patients.php?meta=1')
     ]);
+
+    const list = Array.isArray(listResult) ? listResult : (listResult && listResult.list) || [];
+    const metaInfo = (metaResult && typeof metaResult === 'object' && !Array.isArray(metaResult)) ? metaResult : (metaResult && metaResult.metaInfo) || {
+      wards: [], doctors: [], consultants: [], beds: [], care_units: [], occupied_beds: []
+    };
     return { list, metaInfo };
   }
 
   function applySnapshot(snapshot) {
-    patients = snapshot.list;
-    meta = snapshot.metaInfo;
+    patients = Array.isArray(snapshot.list) ? snapshot.list : [];
+    meta = snapshot.metaInfo || { wards: [], doctors: [], consultants: [], beds: [], care_units: [], occupied_beds: [] };
     populateFormMeta();
     populateBeds();
+  }
+
+  function exportPatientsCsv() {
+    const rows = [
+      ['no', 'patient', 'dob', 'ward', 'bed', 'doctor', 'admitted', 'status']
+    ];
+
+    filtered.forEach((patient) => {
+      rows.push([
+        patient.no,
+        patient.name,
+        patient.dob,
+        patient.ward,
+        patient.bed,
+        patient.doctor_name || '',
+        patient.admitted,
+        patient.discharged ? 'Discharged' : 'Admitted'
+      ]);
+    });
+
+    const csv = rows.map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'ipmh-patient-export.csv';
+    link.click();
+    URL.revokeObjectURL(url);
+    showToast('Patient export generated successfully.');
   }
 
   async function loadAll() {
@@ -146,6 +187,15 @@
     render();
   };
 
+  document.querySelectorAll('.filter-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.filter-chip').forEach((btn) => btn.classList.toggle('active', btn === chip));
+      activeChip = chip.dataset.chip || 'all';
+      page = 1;
+      render();
+    });
+  });
+
   ['searchInput', 'wardFilter', 'statusFilter'].forEach((id) => {
     document.getElementById(id).addEventListener('input', () => {
       page = 1;
@@ -154,6 +204,8 @@
   });
 
   pWard.addEventListener('change', populateBeds);
+
+  document.getElementById('exportPatientsBtn').addEventListener('click', exportPatientsCsv);
 
   function resetForm() {
     document.getElementById('editPatientNo').value = '';
@@ -196,6 +248,38 @@
       showToast(error.message || 'Failed to save patient.', 'error');
     }
   });
+
+  window.openPatientDetail = function (no) {
+    const p = patients.find((x) => x.no === no);
+    if (!p) return;
+
+    const content = document.getElementById('patientDetailContent');
+    content.innerHTML = `
+      <div class="patient-detail-header">
+        <div>
+          <h3 class="card-title">${p.name}</h3>
+          <p class="page-subtitle">Patient #${p.no}</p>
+        </div>
+        <div class="detail-badges">
+          <span class="badge ${p.discharged ? 'badge-green' : 'badge-blue'}">${p.discharged ? 'Discharged' : 'Admitted'}</span>
+          <span class="badge badge-purple">${p.ward}</span>
+        </div>
+      </div>
+      <div class="detail-metrics">
+        <div class="detail-metric"><small>Date of Birth</small><strong>${p.dob}</strong></div>
+        <div class="detail-metric"><small>Ward / Bed</small><strong>${p.ward} • Bed ${p.bed}</strong></div>
+        <div class="detail-metric"><small>Doctor</small><strong>${p.doctor_name || '—'}</strong></div>
+        <div class="detail-metric"><small>Consultant</small><strong>${p.consultant_name || '—'}</strong></div>
+        <div class="detail-metric"><small>Date Admitted</small><strong>${p.admitted}</strong></div>
+        <div class="detail-metric"><small>Date Discharged</small><strong>${p.discharged || '—'}</strong></div>
+      </div>
+      <div class="form-actions" style="justify-content:flex-start; margin-top:0.5rem;">
+        <button class="btn btn-primary btn-sm" type="button" onclick="editPatient(${p.no}); closeModal('patientDetailModal');">Edit record</button>
+        <button class="btn btn-ghost btn-sm" type="button" onclick="closeModal('patientDetailModal')">Close</button>
+      </div>
+    `;
+    openModal('patientDetailModal');
+  };
 
   window.editPatient = function (no) {
     const p = patients.find((x) => x.no === no);

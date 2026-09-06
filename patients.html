@@ -43,7 +43,11 @@
       <h1 class="page-title">Patients</h1>
       <p class="page-subtitle">Manage patient admissions, records and discharges.</p>
     </div>
-    <div class="page-header-actions">
+    <div class="page-header-actions export-actions">
+      <button class="btn btn-ghost btn-sm" id="exportPatientsBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Export CSV
+      </button>
       <button class="btn btn-primary" id="addPatientBtn" onclick="openModal('patientModal')">
         <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
         Admit Patient
@@ -52,6 +56,12 @@
   </div>
 
   <div class="card">
+    <div class="filter-chip-group">
+      <button class="filter-chip active" type="button" data-chip="all">All Records</button>
+      <button class="filter-chip" type="button" data-chip="admitted">Admitted</button>
+      <button class="filter-chip" type="button" data-chip="discharged">Discharged</button>
+      <button class="filter-chip" type="button" data-chip="critical">Critical</button>
+    </div>
     <div class="filter-bar">
       <input type="text" id="searchInput" placeholder="Search patients…"/>
       <select id="wardFilter">
@@ -140,6 +150,17 @@
         <button type="submit" class="btn btn-primary" id="patientSubmitBtn">Admit Patient</button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- Patient Detail Modal -->
+<div class="modal-overlay" id="patientDetailModal">
+  <div class="modal" style="max-width: 620px;">
+    <div class="modal-header">
+      <h2 class="modal-title">Patient Overview</h2>
+      <button class="modal-close">✕</button>
+    </div>
+    <div class="patient-detail-card" id="patientDetailContent"></div>
   </div>
 </div>
 

@@ -8,6 +8,7 @@
   --bg:          #07111d;
   --bg-2:        #0d1728;
   --bg-3:        #12213a;
+  --bg-4:        #0b1322;
   --border:      rgba(148,163,184,0.18);
   --border-2:    rgba(148,163,184,0.28);
 
@@ -72,6 +73,7 @@ body {
   color: var(--text);
   display: flex;
   min-height: 100vh;
+  min-width: 0;
   overflow-x: hidden;
 }
 
@@ -282,7 +284,9 @@ body.light-mode .topbar {
 ══════════════════════════════════════════ */
 .main-content {
   margin-left: var(--sidebar-w);
-  flex: 1;
+  flex: 1 1 auto;
+  width: calc(100% - var(--sidebar-w));
+  min-width: 0;
   min-height: 100vh;
   min-height: 100dvh;
   padding: 2rem 2rem 2.5rem;
@@ -313,7 +317,7 @@ body.light-mode .topbar {
   line-height: 1.2;
 }
 .page-subtitle { font-size: 0.875rem; color: var(--text-2); margin-top: 0.25rem; }
-.page-header-actions { display: flex; align-items: center; gap: 0.75rem; }
+.page-header-actions { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
 
 .date-badge {
   font-size: 0.8rem;
@@ -331,16 +335,16 @@ body.light-mode .topbar {
 
 /* ── Generic Card ── */
 .card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.96));
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: linear-gradient(180deg, rgba(15,23,42,0.92), rgba(11,19,34,0.96));
+  border: 1px solid rgba(148,163,184,0.12);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 18px 36px rgba(2,6,23,0.22);
 }
 .card:hover {
   border-color: var(--border-2);
-  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 22px 42px rgba(2,6,23,0.28);
 }
 .card-header {
   display: flex;
@@ -448,7 +452,7 @@ body.light-mode .topbar {
 }
 .modal-overlay.open { display: flex; }
 .modal {
-  background: var(--bg-2);
+  background: linear-gradient(180deg, rgba(15,23,42,0.98), rgba(11,19,34,0.98));
   border: 1px solid var(--border-2);
   border-radius: var(--radius-lg);
   padding: 1.75rem;
@@ -471,6 +475,26 @@ body.light-mode .topbar {
 }
 .modal-close:hover { background: var(--red-dim); color: var(--red); }
 
+.patient-detail-card {
+  display: grid; gap: 1rem;
+}
+.patient-detail-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+}
+.detail-badges {
+  display: flex; gap: 0.5rem; flex-wrap: wrap;
+}
+.detail-metrics {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem;
+}
+.detail-metric {
+  background: rgba(148,163,184,0.08);
+  border: 1px solid var(--border);
+  border-radius: 12px; padding: 0.75rem;
+}
+.detail-metric small { color: var(--text-3); display: block; margin-bottom: 0.2rem; }
+.detail-metric strong { color: var(--text); font-size: 1rem; }
+
 /* ── Search / Filter Bar ── */
 .filter-bar {
   display: flex; gap: 0.75rem; align-items: center;
@@ -478,6 +502,30 @@ body.light-mode .topbar {
 }
 .filter-bar input { max-width: 280px; }
 .filter-bar select { max-width: 180px; }
+
+.filter-chip-group {
+  display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;
+}
+.filter-chip {
+  border: 1px solid var(--border-2);
+  background: rgba(96,165,250,0.08);
+  color: var(--text-2);
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: all var(--transition);
+}
+.filter-chip.active,
+.filter-chip:hover {
+  background: rgba(96,165,250,0.18);
+  color: var(--text);
+  border-color: rgba(96,165,250,0.4);
+}
+
+.export-actions {
+  display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+}
 
 /* ── Empty State ── */
 .empty-state {
@@ -552,6 +600,8 @@ body.light-mode .topbar {
  .sidebar.open { transform: translateX(0); }
  .main-content {
    margin-left: 0;
+   width: 100%;
+   max-width: 100%;
    padding: 1rem;
    padding-top: calc(var(--topbar-h) + 1rem);
  }
@@ -567,6 +617,11 @@ body.light-mode .topbar {
    width: 100%;
    justify-content: center;
  }
+ .export-actions {
+   width: 100%;
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+ }
  .filter-bar {
    grid-template-columns: 1fr;
    gap: 0.6rem;
@@ -579,12 +634,16 @@ body.light-mode .topbar {
  .modal { margin: 1rem; max-width: 100%; }
  .card { padding: 1rem; }
  .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+ .data-table { min-width: 720px; }
 }
 
 @media (max-width: 480px) {
  .main-content { padding: 0.875rem; }
  .page-title { font-size: 1.45rem; }
  .page-subtitle { font-size: 0.8rem; }
+ .export-actions {
+   grid-template-columns: 1fr;
+ }
  .btn {
    width: 100%;
    justify-content: center;

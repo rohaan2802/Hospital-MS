@@ -136,14 +136,26 @@ const API = (() => {
         ...options
       });
 
+      const contentType = response.headers.get('content-type') || '';
+      const isJsonResponse = contentType.includes('application/json');
+
       let payload = {};
-      try {
-        payload = await response.json();
-      } catch (_) {
-        payload = {};
+      if (isJsonResponse) {
+        try {
+          payload = await response.json();
+        } catch (_) {
+          payload = {};
+        }
       }
 
-      if (!response.ok || payload.ok === false) {
+      const shouldFallback =
+        !response.ok ||
+        payload.ok === false ||
+        (!isJsonResponse && Object.keys(payload).length === 0);
+
+      if (shouldFallback) {
+        const fallback = fallbackFor(url, options.method || 'GET');
+        if (fallback !== undefined) return fallback;
         const message = payload.error || `Request failed: ${response.status}`;
         throw new Error(message);
       }
@@ -153,6 +165,36 @@ const API = (() => {
       if (fallback !== undefined) return fallback;
       throw error;
     }
+  }
+
+  if (!window.showToast) {
+    window.showToast = function (msg, type = 'success') {
+      let container = document.getElementById('toastContainer');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        document.body.appendChild(container);
+      }
+      const toast = document.createElement('div');
+      toast.className = 'toast' + (type === 'error' ? ' error' : '');
+      toast.textContent = msg;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3500);
+    };
+  }
+
+  if (!window.openModal) {
+    window.openModal = function (id) {
+      const modal = document.getElementById(id);
+      if (modal) modal.classList.add('open');
+    };
+  }
+
+  if (!window.closeModal) {
+    window.closeModal = function (id) {
+      const modal = document.getElementById(id);
+      if (modal) modal.classList.remove('open');
+    };
   }
 
   return {
