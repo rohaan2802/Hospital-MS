@@ -722,9 +722,16 @@ body.light-mode .filter-chip.active {
 }
 
 @media (max-width: 480px) {
- .main-content { padding: 0.875rem; }
+ .main-content {
+   padding: 0.875rem;
+   padding-top: calc(var(--topbar-h) + 1rem);
+ }
  .page-title { font-size: 1.45rem; }
- .page-subtitle { font-size: 0.8rem; }
+ .page-subtitle {
+   font-size: 0.8rem;
+   line-height: 1.5;
+   max-width: 34rem;
+ }
  .export-actions {
    grid-template-columns: 1fr;
  }
