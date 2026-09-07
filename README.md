@@ -1,6 +1,6 @@
 # Ivor Paine Memorial Hospital (IPMH) Management System
 
-## Project screenshots
+## Project Screenshots
 
 The dashboard preview below presents the hospital operations workspace on desktop and mobile: KPI cards, ward occupancy, specialties, care utilization, recent admissions, and quick actions are all visible in the responsive composition.
 
